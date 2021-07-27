@@ -1,0 +1,12 @@
+apiVersion: v1
+entries:
+  backendhelm:
+  - apiVersion: v2
+    created: "2021-07-27T12:15:49.6311927-04:00"
+    description: A Helm chart for Kubernetes
+    digest: 7ad7fa06a8487adf06df27e6aba5fe8269d31796f1e3a8053f0311b2c3d5ce89
+    name: backendhelm
+    urls:
+    - https://suzettewilliams.github.io/helm-charts/backendhelm-0.1.0.tgz
+    version: 0.1.0
+generated: "2021-07-27T12:15:49.6300643-04:00"

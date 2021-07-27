@@ -1,0 +1,10 @@
+replicas:
+  adminer: 2
+  app: 2
+  celery: 2
+  celery-high: 2
+  celery-low: 2
+  monitor: 2
+  redis: 2
+  solr: 2 
+

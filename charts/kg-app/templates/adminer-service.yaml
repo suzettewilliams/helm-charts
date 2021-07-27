@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: {{ template "backendhelm.fullname" . }}-kubernetestest
+  labels:
+    kg-app-deployment: adminer
+  name: adminer
+spec:
+  ports:
+    - name: "8082"
+      port: 8082
+      targetPort: 8080
+  selector:
+    kg-app-deployment: adminer
+status:
+  loadBalancer: {}

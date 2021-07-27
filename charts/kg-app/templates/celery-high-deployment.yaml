@@ -1,0 +1,123 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{ template "backendhelm.fullname" . }}-kubernetestest
+  labels:
+    kg-app-deployment: celery-high
+  name: celery-high
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      kg-app-deployment: celery-high
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        kg-app-deployment: celery-high
+    spec:
+      containers:
+        - args:
+            - celery
+            - -A
+            - nlp.tasks
+            - worker
+            - -l
+            - info
+            - -E
+            - --concurrency=3
+            - -n
+            - worker.high_priority@%h
+            - -Q
+            - high_priority
+          env:
+            - name: AUTHLIB_INSECURE_TRANSPORT
+              valueFrom:
+                configMapKeyRef:
+                  key: AUTHLIB_INSECURE_TRANSPORT
+                  name: dev-env
+            - name: DATABASE_DB
+              valueFrom:
+                configMapKeyRef:
+                  key: DATABASE_DB
+                  name: dev-env
+            - name: DATABASE_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: DATABASE_HOST
+                  name: dev-env
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  key: DATABASE_PASSWORD
+                  name: dev-env
+            - name: DATABASE_USER
+              valueFrom:
+                configMapKeyRef:
+                  key: DATABASE_USER
+                  name: dev-env
+            - name: GOOGLE_CLIENT_ID
+              valueFrom:
+                configMapKeyRef:
+                  key: GOOGLE_CLIENT_ID
+                  name: dev-env
+            - name: GOOGLE_CLIENT_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  key: GOOGLE_CLIENT_SECRET
+                  name: dev-env
+            - name: LOCAL_BACKEND_DIR
+              valueFrom:
+                configMapKeyRef:
+                  key: LOCAL_BACKEND_DIR
+                  name: dev-env
+            - name: MOESIF_APPLICATION_ID
+              valueFrom:
+                configMapKeyRef:
+                  key: MOESIF_APPLICATION_ID
+                  name: dev-env
+            - name: MYSQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  key: MYSQL_DATABASE
+                  name: dev-env
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  key: MYSQL_ROOT_PASSWORD
+                  name: dev-env
+            - name: OMP_THREAD_LIMIT
+              value: "1"
+            - name: RUNNING_DOCKER
+              valueFrom:
+                configMapKeyRef:
+                  key: RUNNING_DOCKER
+                  name: dev-env
+            - name: SECRET_KEY
+              valueFrom:
+                configMapKeyRef:
+                  key: SECRET_KEY
+                  name: dev-env
+            - name: SOLR_CORE
+              valueFrom:
+                configMapKeyRef:
+                  key: SOLR_CORE
+                  name: dev-env
+          image: celery-high
+          name: celery-high
+          resources: {}
+          volumeMounts:
+            - mountPath: /app/kaleidoglobe
+              name: celery-high-claim0
+            - mountPath: /app/tests
+              name: celery-high-claim1
+      restartPolicy: Always
+      volumes:
+        - name: celery-high-claim0
+          persistentVolumeClaim:
+            claimName: celery-high-claim0
+        - name: celery-high-claim1
+          persistentVolumeClaim:
+            claimName: celery-high-claim1
+status: {}

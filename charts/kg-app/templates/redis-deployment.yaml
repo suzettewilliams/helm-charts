@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{ template "backendhelm.fullname" . }}-kubernetestest
+  labels:
+    kg-app-deployment: redis
+  name: redis
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      kg-app-deployment: redis
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        kg-app-deployment: redis
+    spec:
+      containers:
+        - args:
+            - redis-server
+            - --requirepass
+            - devpassword
+            - --save
+            - "60"
+            - "1"
+          image: redis:5.0
+          name: redis
+          resources: {}
+          volumeMounts:
+            - mountPath: /var/lib/redis/data
+              name: redis
+      restartPolicy: Always
+      volumes:
+        - name: redis
+          persistentVolumeClaim:
+            claimName: redis
+status: {}

@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{ template "backendhelm.fullname" . }}-kubernetestest
+  labels:
+    kg-app-deployment: adminer
+  name: adminer
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      kg-app-deployment: adminer
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        kg-app-deployment: adminer
+    spec:
+      containers:
+        - image: adminer
+          name: adminer
+          ports:
+            - containerPort: 8080
+          resources: {}
+      restartPolicy: Always
+status: {}
